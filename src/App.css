@@ -1,14 +1,38 @@
-body {
+* {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700; /* Bold weight for headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    /* Bold weight for headings */
 }
 
-p, a, button, input, textarea {
-    font-weight: 400; /* Regular weight for body text */
+p,
+a,
+button,
+input,
+textarea {
+    font-weight: 400;
+    /* Regular weight for body text */
+}
+
+/* navbar */
+.flex-grow-1 {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.flex-grow-1::-webkit-scrollbar {
+    display: none;
 }

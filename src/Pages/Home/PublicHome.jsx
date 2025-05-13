@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AuthModal from '../../Components/AuthModal';
 
 const PublicHome = () => {
     return (
@@ -8,22 +7,20 @@ const PublicHome = () => {
             <nav className="navbar navbar-light bg-light">
                 <div className="container">
                     <Link to="/" className="navbar-brand fs-2" style={{ fontFamily: "Anton" }}>
-                        Medium
+                        Thinker
                     </Link>
-                    <button
-                        type="button"
-                        className="btn btn-dark rounded-pill me-5 px-3"
-                        data-bs-toggle="modal"
-                        data-bs-target="#authModal"
-                    >
-                        Sign In
-                    </button>
+                    <div>
+                        <Link to="/login" className="btn btn-dark rounded-pill me-3 px-3">
+                            Sign In
+                        </Link>
+                        <Link to="/register" className="btn btn-outline-dark rounded-pill px-3">
+                            Sign Up
+                        </Link>
+                    </div>
                 </div>
             </nav>
-            <AuthModal />
 
             {/* Hero Section */}
-
             <div className="container-fluid p-0 pt-3 bg-light" style={{ overflow: 'hidden' }}>
                 <div className="row g-0">
                     {/* Left Content */}
@@ -34,8 +31,9 @@ const PublicHome = () => {
                             <p className="lead" style={{ fontFamily: "Poppins" }}>
                                 A place to read, write, and deepen your understanding
                             </p>
-                            <button className="btn btn-dark rounded-pill mt-2 py-2 px-3" data-bs-toggle="modal"
-                                data-bs-target="#authModal">Start Reading</button>
+                            <Link to="/login" className="btn btn-dark rounded-pill mt-2 py-2 px-3">
+                                Start Reading
+                            </Link>
                         </div>
                     </div>
 
@@ -55,7 +53,6 @@ const PublicHome = () => {
                     </div>
                 </div>
             </div>
-
         </>
     );
 };
