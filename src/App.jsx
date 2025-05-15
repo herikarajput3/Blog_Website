@@ -8,6 +8,7 @@ import Home from './Pages/Home/Home';
 import PublicHome from './Pages/Home/PublicHome'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Post from './Pages/Post/Post';
+import UserProfile from './Pages/UserProfile/UserProfile';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Route path='/home' element={<Home />} />
             <Route path='/blog-create' element={<BlogCreate />} />
             <Route path='/post/:id' element={<Post />} />
+            <Route path='/profile' element={<UserProfile />} />
 
 
           </Route>

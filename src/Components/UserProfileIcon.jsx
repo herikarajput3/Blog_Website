@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserProfile = () => {
+const UserProfileIcon = () => {
     return (
         <div
             className="rounded-circle d-flex align-items-center justify-content-center me-3"
@@ -19,4 +19,4 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default UserProfileIcon;

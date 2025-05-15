@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import UserProfile from "./UserProfile";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import UserProfileIcon from "./UserProfileIcon";
 
 const StaffPicks = () => {
   const [blogTitles, setBlogTitles] = useState([]);
@@ -32,8 +32,8 @@ const StaffPicks = () => {
       <div className="mt-3">
         {blogTitles.map((blog) =>
           <div className="d-flex align-items-center mb-3" key={blog._id || blog}>
-            <UserProfile />
-            <Link className="m-0 fs-6 text-decoration-none text-dark" onClick={() => handlePostClick(blog._id)}>{blog}</Link>
+            <UserProfileIcon />
+            <Link className="m-0 fs-6 text-decoration-none text-dark" style={{ fontWeight: "600" }} onClick={() => handlePostClick(blog._id)}>{blog}</Link>
           </div>
         )}
       </div>

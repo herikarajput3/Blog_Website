@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import UserProfile from "../../Components/UserProfile";
+import UserProfile from "../../Components/UserProfileIcon";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -40,8 +40,8 @@ const Post = () => {
             setUserName({ name, lname });
             // console.log(response.data.name, 'This is name');
             // console.log(response.data.lname, 'This is lname');
-            
-            
+
+
         } catch (error) {
             console.log(error, 'This is error');
         }

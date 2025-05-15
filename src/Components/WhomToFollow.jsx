@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import UserProfile from "./UserProfile";
+import UserProfileIcon from "./UserProfileIcon";
 import axios from "axios";
 
 const WhoToFollow = () => {
@@ -30,7 +30,7 @@ const WhoToFollow = () => {
             className="d-flex align-items-center justify-content-between mb-3"
           >
             <div className="d-flex align-items-center">
-              <UserProfile />
+              <UserProfileIcon />
               <p className="m-0">{user.name}</p>
             </div>
             <button
