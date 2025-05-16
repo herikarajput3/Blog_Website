@@ -12,7 +12,6 @@ const EditUserProfile = () => {
 
     const userId = JSON.parse(localStorage.getItem('userId'));
     const fetchUserData = async () => {
-
         try {
             const response = await axios.get(`http://127.0.0.1:3000/getParticularUser/${userId}`);
             // console.log(response.data, 'This is response');

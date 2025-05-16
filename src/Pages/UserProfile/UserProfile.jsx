@@ -1,79 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import UserBlog from '../../Components/UserBlog';
 import EditUserProfile from '../../Components/EditUserProfile';
 import UserProfileIcon from '../../Components/UserProfileIcon';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import BlogDelete from '../../Components/BlogDelete';
 
-// Sample data for demonstration
-const sampleUser = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    followers: 243,
-    following: 118,
-    avatar: null // Placeholder for user avatar
-};
-
-const samplePosts = [
-    {
-        id: 1,
-        title: "Getting Started with React Hooks",
-        excerpt: "Learn how to use React Hooks to simplify your components and manage state effectively.",
-        date: "May 10, 2025",
-        readTime: "5 min read",
-        likes: 24,
-        coverImage: "https://via.placeholder.com/800x400"
-    },
-];
-
-
-// Main UserProfile component with enhanced styling
 const UserProfile = () => {
     const [userDetails, setUserDetails] = useState('');
+    const [blogs, setBlogs] = useState([]);
+    const [activeTab, setActiveTab] = useState('posts');
+    const [showOptions, setShowOptions] = useState(null);
+    const [blogId, setBlogId] = useState('');
+
     const userId = JSON.parse(localStorage.getItem('userId'));
+    const navigate = useNavigate();
+
 
     const fetchUserData = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:3000/getParticularUser/${userId}`);
             setUserDetails(response.data);
-
-
+            setBlogs(response.data.blog || []);
         } catch (error) {
-            console.log(error, 'This is error');
+            console.error('Error fetching user data:', error);
         }
-    }
+    };
 
     useEffect(() => {
         fetchUserData();
     }, [userId]);
 
-
-    const [posts, setPosts] = useState(samplePosts);
-    const [activeTab, setActiveTab] = useState('posts');
-    const handleEditPost = (postId) => {
-        console.log(`Editing post with ID: ${postId}`);
+    const handlePostClick = (id) => {
+        navigate(`/post/${id}`);
     };
 
-    const handleDeletePost = (postId) => {
-        setPosts(posts.filter((post) => post.id !== postId));
+    const handleDeleteClick = (id) => {
+        setBlogId(id);
     };
-
     return (
         <div className="container mt-4">
             <div className="row">
+                {/* User Profile Details */}
                 <div className="col-lg-4 mb-4">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body p-4">
                             <div className="text-center">
-                                {/* User Profile Details */}
                                 <div className="position-relative d-inline-block mb-3">
                                     <UserProfileIcon />
                                 </div>
                                 {userDetails && (
                                     <>
-                                        <h4 className="fw-bold mb-1">{userDetails.name} {userDetails.lname}</h4>
+                                        <h4 className="fw-bold mb-1">
+                                            {userDetails.name} {userDetails.lname}
+                                        </h4>
                                         <p className="text-muted mb-3">{userDetails.email}</p>
-
                                     </>
                                 )}
                                 <div className="d-flex justify-content-center mb-4">
@@ -86,9 +66,6 @@ const UserProfile = () => {
                                         <small className="text-muted">Following</small>
                                     </div>
                                 </div>
-
-
-
                                 <button
                                     className="btn btn-dark px-4 py-2"
                                     data-bs-toggle="modal"
@@ -101,13 +78,13 @@ const UserProfile = () => {
                     </div>
                 </div>
 
-                {/* Content Area */}
+                {/* User Blogs Section */}
                 <div className="col-lg-8">
-                    {/* Navigation Tabs */}
                     <ul className="nav nav-tabs mb-4 border-0">
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeTab === 'posts' ? 'active fw-bold' : 'text-muted'}`}
+                                className={`nav-link ${activeTab === 'posts' ? 'active fw-bold' : 'text-muted'
+                                    }`}
                                 onClick={() => setActiveTab('posts')}
                             >
                                 <i className="fa fa-file-text me-2"></i>My Posts
@@ -115,15 +92,8 @@ const UserProfile = () => {
                         </li>
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeTab === 'drafts' ? 'active fw-bold' : 'text-muted'}`}
-                                onClick={() => setActiveTab('drafts')}
-                            >
-                                <i className="fa fa-pencil-square-o me-2"></i>Drafts
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeTab === 'liked' ? 'active fw-bold' : 'text-muted'}`}
+                                className={`nav-link ${activeTab === 'liked' ? 'active fw-bold' : 'text-muted'
+                                    }`}
                                 onClick={() => setActiveTab('liked')}
                             >
                                 <i className="fa fa-heart me-2"></i>Liked
@@ -131,46 +101,95 @@ const UserProfile = () => {
                         </li>
                     </ul>
 
-                    {/* Post List Section */}
                     <div>
                         {activeTab === 'posts' && (
-                            posts.length > 0 ? (
-                                posts.map((post) => (
-                                    <UserBlog
-                                        key={post.id}
-                                        post={post}
-                                        onEdit={handleEditPost}
-                                        onDelete={handleDeletePost}
-                                    />
+                            blogs.length > 0 ? (
+                                blogs.map((post) => (
+                                    <div className="mb-2 border-bottom" key={post._id}>
+                                        <div
+                                            className="row"
+                                            onClick={() => handlePostClick(post._id)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <div className="col-md-12 pb-3 pe-md-5">
+                                                <h2 className="mt-2 fs-4 fw-bold">{post.title}</h2>
+                                                <p
+                                                    className="overflow-hidden text-secondary fs-6"
+                                                    style={{
+                                                        display: '-webkit-box',
+                                                        WebkitLineClamp: '2',
+                                                        WebkitBoxOrient: 'vertical',
+                                                    }}
+                                                >
+                                                    {post.description}
+                                                </p>
+                                                <div className="d-flex align-items-center mt-2">
+                                                    <span className="me-3">
+                                                        <i className="fa fa-heart text-danger me-1"></i>100
+                                                    </span>
+                                                    <span>
+                                                        <i className="fa fa-comment me-1 fs-6 text-secondary"></i>13
+                                                    </span>
+                                                    <div className="position-relative ms-auto me-2">
+                                                        <button
+                                                            className="btn btn-sm btn-link text-dark"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setShowOptions(
+                                                                    showOptions === post._id ? null : post._id
+                                                                );
+                                                            }}
+                                                        >
+                                                            <i className="fa fa-ellipsis-h"></i>
+                                                        </button>
+                                                        {showOptions === post._id && (
+                                                            <div
+                                                                className="position-absolute end-0 bg-white rounded border shadow-md mt-2 z-3"
+                                                                style={{ minWidth: '150px' }}
+                                                            >
+                                                                <Link
+                                                                    className="btn btn-link text-dark text-decoration-none d-block w-100 text-start py-2"
+                                                                    to={`/blog-edit/${post._id}`}
+                                                                    onClick={(e) => e.stopPropagation()}
+                                                                >
+                                                                    <i className="fa fa-pencil me-2"></i>Edit post
+                                                                </Link>
+                                                                <button
+                                                                    className="btn btn-link text-danger text-decoration-none d-block w-100 text-start py-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteBlogModal"
+                                                                    value={post._id}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleDeleteClick(post._id);
+                                                                    }}
+                                                                >
+                                                                    <i className="fa fa-trash me-2"></i>Delete post
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 ))
                             ) : (
                                 <div className="text-center p-5 bg-light rounded">
                                     <i className="fa fa-file-text fa-3x text-muted mb-3"></i>
                                     <p className="text-muted">You haven't written any posts yet.</p>
-                                    <button className="btn btn-dark mt-2">
+                                    <Link to={"/blog-create"} className="btn btn-dark mt-2">
                                         <i className="fa fa-plus me-2"></i>Create New Post
-                                    </button>
+                                    </Link>
                                 </div>
                             )
                         )}
-
-                        {activeTab === 'drafts' && (
-                            <div className="text-center p-5 bg-light rounded">
-                                <i className="fa fa-pencil-square-o fa-3x text-muted mb-3"></i>
-                                <p className="text-muted">No drafts found.</p>
-                                <button className="btn btn-dark mt-2">
-                                    <i className="fa fa-plus me-2"></i>Create New Draft
-                                </button>
-                            </div>
-                        )}
-
+                    </div>
+                    <div>
                         {activeTab === 'liked' && (
                             <div className="text-center p-5 bg-light rounded">
                                 <i className="fa fa-heart fa-3x text-muted mb-3"></i>
                                 <p className="text-muted">You haven't liked any posts yet.</p>
-                                <button className="btn btn-outline-dark mt-2">
-                                    <i className="fa fa-search me-2"></i>Explore Posts
-                                </button>
                             </div>
                         )}
                     </div>
@@ -178,9 +197,10 @@ const UserProfile = () => {
             </div>
 
             {/* Edit Profile Modal */}
-            <EditUserProfile
+            <EditUserProfile />
 
-            />
+            {/* Delete Blog Modal */}
+            <BlogDelete blogId={blogId} />
         </div>
     );
 };

@@ -6,8 +6,8 @@ import axios from 'axios';
 const Header = () => {
     const [userName, setUserName] = useState('');
 
+    const userId = JSON.parse(localStorage.getItem('userId'));
     const fetchUserName = async () => {
-        const userId = JSON.parse(localStorage.getItem('userId'));
 
         try {
             const response = await axios.get(`http://127.0.0.1:3000/getParticularUser/${userId}`);
@@ -42,7 +42,7 @@ const Header = () => {
                         </form>
                     </div>
                     <div className='d-flex align-items-center justify-content-evenly gap-3 me-lg-5'>
-                        <Link className='fs-6 text-decoration-none text-dark' to="/blog-create"><i className="fa-regular fa-pen-to-square me-2"></i>Write</Link>
+                        <Link className='fs-6 text-decoration-none text-dark' to={'/blog-create'}><i className="fa-regular fa-pen-to-square me-2"></i>Write</Link>
                         <Link className='fs-6 text-decoration-none text-dark' to="/"><i className="fa-regular fa-bell"></i></Link>
                         <Link className='fs-6 text-decoration-none text-dark' to="/profile" ><i className="fa-regular fa-user me-2"></i>{userName}</Link>
                     </div>

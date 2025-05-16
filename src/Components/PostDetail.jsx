@@ -60,7 +60,7 @@ const PostDetail = () => {
                 </p>
                 <div className="d-flex align-items-center mt-2">
                   <i
-                    className="fa-regular fa-thumbs-up me-3 fs-6 text-secondary"
+                    className="fa fa-heart text-danger me-3 fs-6 text-secondary"
                     style={{ cursor: "pointer" }}
                   ></i>
                   <i

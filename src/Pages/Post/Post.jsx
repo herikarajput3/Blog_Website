@@ -15,7 +15,7 @@ const Post = () => {
     const displayBlog = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:3000/getSingleBlog/${id}`);
-            console.log(response.data, "this is data");
+            // console.log(response.data, "this is data");
             // console.log(response.data.blog.title,"This is blog title");
             if (response.data.success) {
                 setBlog(response.data.blog); // Store blog data in state

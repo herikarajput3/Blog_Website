@@ -1,23 +1,42 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const BlogCreate = () => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+const BlogEdit = () => {
+    const navigate = useNavigate();
+    const blogId_from_url = useParams();
+    const blogid = blogId_from_url.blogid;
+    // console.log("Blogid", blogId_from_url.blogid);
 
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const userId = JSON.parse(localStorage.getItem('userId'));
+
+    const fetchBlogData = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:3000/getSingleBlog/${blogid}`);
+            // console.log("blogtitle", response.data.blog);
+            reset(response.data.blog);
+        } catch (error) {
+            console.log(error, 'This is error');
+        }
+    }
+
+    useEffect(() => {
+        fetchBlogData();
+    }, [blogid]);
+
     const onSubmit = async (data) => {
         try {
-            const response = await axios.post('http://127.0.0.1:3000/blogCreate', data);
-            console.log(response.data, "response data");
-
-            if (response.data.message) {
-                toast.success('Blog created successfully!');
-            }
+            const response = await axios.put(`http://127.0.0.1:3000/updateBlog/${blogid}`, data);
+            console.log("response", response.data);
+            // window.location.reload();
         } catch (error) {
             console.log(error, "error");
         }
+        navigate('/profile');
         reset();
     };
 
@@ -55,7 +74,7 @@ const BlogCreate = () => {
                                 className='fs-5 border w-100 p-2'
                                 {...register('description', { required: 'Description is required' })}
                                 style={{ fontFamily: 'Times New Roman' }}
-                                rows="5"
+                                rows="10"
                                 placeholder='Tell Your Story...'
                             />
                             {errors.description && (
@@ -71,7 +90,7 @@ const BlogCreate = () => {
                             }}
                             onClick={handleSubmit(onSubmit)}
                         >
-                            Publish
+                            Update
                         </button>
                     </form>
                 </div>
@@ -80,4 +99,4 @@ const BlogCreate = () => {
     );
 };
 
-export default BlogCreate;
+export default BlogEdit;
