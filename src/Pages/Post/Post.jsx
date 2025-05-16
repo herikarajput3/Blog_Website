@@ -12,6 +12,7 @@ const Post = () => {
     const [userName, setUserName] = useState('');
     const [comments, setComments] = useState([]);
 
+    const userId = JSON.parse(localStorage.getItem('userId'));
 
     const displayBlog = async () => {
         try {
@@ -19,11 +20,11 @@ const Post = () => {
             // console.log(response.data, "this is data");
             // console.log(response.data.blog.title,"This is blog title");
             if (response.data.success) {
-                setBlog(response.data.blog); // Store blog data in state
+                setBlog(response.data.blog);
+                setComments(response.data.blog.comments);
             } else {
                 setError("Blog not found");
             }
-
             setLoading(false);
         } catch (error) {
             console.log(error, "this is error");
@@ -32,8 +33,8 @@ const Post = () => {
         }
     }
 
+
     const fetchUserName = async () => {
-        const userId = JSON.parse(localStorage.getItem('userId'));
 
         try {
             const response = await axios.get(`http://127.0.0.1:3000/getParticularUser/${userId}`);
@@ -55,26 +56,10 @@ const Post = () => {
             const response = await axios.post('http://127.0.0.1:3000/commentCreate', { userId, comment, blogId });
             // console.log("this is data", response.data);
             setInputValue('');
-            getComments();
+            displayBlog();
 
         } catch (error) {
             console.log(error, "this is error");
-        }
-    }
-
-    const getComments = async () => {
-        try {
-            const response = await axios.get('http://127.0.0.1:3000/getAllComments');
-            // console.log("this is data", response.data);
-            setComments(response.data);
-
-            // console.log("username", response.data[0].commenter.name);
-            // console.log("comment", response.data[0].commentText);
-
-
-        } catch (error) {
-            console.log(error, "this is error");
-
         }
     }
 
@@ -82,9 +67,8 @@ const Post = () => {
         try {
             const response = await axios.delete(`http://127.0.0.1:3000/deleteComment/${commentId}`);
             // console.log("comment id", commentId);
-
             // console.log("this is data", response.data);
-            getComments();
+            displayBlog();
 
         } catch (error) {
 
@@ -93,7 +77,6 @@ const Post = () => {
 
     useEffect(() => {
         fetchUserName();
-        getComments();
     }, [])
 
     useEffect(() => {
@@ -176,29 +159,40 @@ const Post = () => {
                 {/* Comments Section */}
 
                 <div>
+
                     {comments.map((comment) => (
-                        <div className="border-bottom my-3 rounded-lg p-4 position-relative" key={comment.id}>
+                        <div className="border-bottom my-3 rounded-lg p-4 position-relative" key={comment._id}>
                             <div className="d-flex flex-column justify-content-start mb-2">
                                 {/* Comment Header */}
                                 <div className="d-flex align-items-center justify-content-between mb-2">
                                     <div className="d-flex align-items-center">
                                         <UserProfile />
                                         <span className="ms-2" style={{ fontSize: "0.9rem" }}>
-                                            {comment.commenter.name}
+                                            {comment.userId.name} {comment.userId.lname}
                                         </span>
                                     </div>
 
-                                    <button
+                                    {/* <button
                                         className="btn btn-white text-danger"
                                         onClick={() => handleDeleteComment(comment.id)}
+                                        hidden
                                     >
                                         <i className="fa fa-trash me-2"></i>
-                                    </button>
+                                    </button> */}
+
+                                    {userId === comment.userId._id && (
+                                        <button
+                                            className="btn btn-white text-danger"
+                                            onClick={() => handleDeleteComment(comment._id)}
+                                        >
+                                            <i className="fa fa-trash me-2"></i>
+                                        </button>
+                                    )}
                                 </div>
 
                                 {/* Comment Text */}
                                 <div className="py-2 text-muted" style={{ fontSize: "0.9rem" }}>
-                                    {comment.commentText}
+                                    {comment.comment}
                                 </div>
                             </div>
                         </div>
