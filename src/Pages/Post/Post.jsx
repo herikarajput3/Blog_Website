@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserProfile from "../../Components/UserProfileIcon";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Post = () => {
     const { id } = useParams();
@@ -10,6 +10,7 @@ const Post = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
     const [userName, setUserName] = useState('');
+    const [comments, setComments] = useState([]);
 
 
     const displayBlog = async () => {
@@ -39,16 +40,60 @@ const Post = () => {
             const { name, lname } = response.data;
             setUserName({ name, lname });
             // console.log(response.data.name, 'This is name');
-            // console.log(response.data.lname, 'This is lname');
-
-
         } catch (error) {
             console.log(error, 'This is error');
         }
     }
 
+    const handleComment = async () => {
+        const userId = JSON.parse(localStorage.getItem('userId'));
+        const comment = inputValue;
+        const blogId = id;
+        // console.log("userid", userId, "comment", comment, "blogId", blogId);
+
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/commentCreate', { userId, comment, blogId });
+            // console.log("this is data", response.data);
+            setInputValue('');
+            getComments();
+
+        } catch (error) {
+            console.log(error, "this is error");
+        }
+    }
+
+    const getComments = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:3000/getAllComments');
+            // console.log("this is data", response.data);
+            setComments(response.data);
+
+            // console.log("username", response.data[0].commenter.name);
+            // console.log("comment", response.data[0].commentText);
+
+
+        } catch (error) {
+            console.log(error, "this is error");
+
+        }
+    }
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            const response = await axios.delete(`http://127.0.0.1:3000/deleteComment/${commentId}`);
+            // console.log("comment id", commentId);
+
+            // console.log("this is data", response.data);
+            getComments();
+
+        } catch (error) {
+
+        }
+    }
+
     useEffect(() => {
         fetchUserName();
+        getComments();
     }, [])
 
     useEffect(() => {
@@ -107,6 +152,7 @@ const Post = () => {
                             className="form-control mb-2 bg-light border-0 "
                             style={{ resize: "none", fontSize: "14px", }}
                             rows="3"
+                            id="comment"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                         ></textarea>
@@ -118,7 +164,9 @@ const Post = () => {
                                 Cancel
                             </button>
                             <button className="btn btn-dark rounded-pill" style={{ fontSize: "0.8rem" }}
-                                disabled={!inputValue}>
+                                disabled={!inputValue}
+                                onClick={handleComment}
+                            >
                                 Respond
                             </button>
                         </div>
@@ -126,18 +174,37 @@ const Post = () => {
                 </div>
 
                 {/* Comments Section */}
-                <div className="border-bottom pb-1">
 
-                    <div className="d-flex flex-column justify-content-start mb-2">
-                        <div className="d-flex align-items-center mb-2">
-                            <UserProfile />
-                            <span className="" style={{ fontSize: "0.9rem" }}>User Name</span>
+                <div>
+                    {comments.map((comment) => (
+                        <div className="border-bottom my-3 rounded-lg p-4 position-relative" key={comment.id}>
+                            <div className="d-flex flex-column justify-content-start mb-2">
+                                {/* Comment Header */}
+                                <div className="d-flex align-items-center justify-content-between mb-2">
+                                    <div className="d-flex align-items-center">
+                                        <UserProfile />
+                                        <span className="ms-2" style={{ fontSize: "0.9rem" }}>
+                                            {comment.commenter.name}
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        className="btn btn-white text-danger"
+                                        onClick={() => handleDeleteComment(comment.id)}
+                                    >
+                                        <i className="fa fa-trash me-2"></i>
+                                    </button>
+                                </div>
+
+                                {/* Comment Text */}
+                                <div className="py-2 text-muted" style={{ fontSize: "0.9rem" }}>
+                                    {comment.commentText}
+                                </div>
+                            </div>
                         </div>
-                        <div className="py-1" style={{ fontSize: "0.9rem" }}>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis veniam quidem libero, assumenda officiis animi veritatis a! Repellendus quas rerum sapiente! Molestias soluta fugit, mollitia necessitatibus nihil natus deserunt dicta.
-                        </div>
-                    </div>
+                    ))}
                 </div>
+
             </div>
 
         </div >
