@@ -1,0 +1,76 @@
+{
+  "likes": [
+    {
+      "id": "5a6f",
+      "blogId": "6821eb3e0d0164964d97f501",
+      "likedBy": "682084268fd16afdbeb04bae"
+    },
+    {
+      "id": "fe65",
+      "blogId": "6821eb3e0d0164964d97f501",
+      "likedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "4eac",
+      "blogId": "6822e819573f59316345d32c",
+      "likedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "0edc",
+      "blogId": "682711b2a9c8bbd8089cf525",
+      "likedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "4bb7",
+      "blogId": "68271114a9c8bbd8089cf4fe",
+      "likedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "247e",
+      "blogId": "6822e8db573f59316345d342",
+      "likedBy": "682084268fd16afdbeb04bae"
+    },
+    {
+      "id": "1bed",
+      "blogId": "6822e819573f59316345d32c",
+      "likedBy": "682084268fd16afdbeb04bae"
+    },
+    {
+      "id": "11fb",
+      "blogId": "6822e8db573f59316345d342",
+      "likedBy": "682085278fd16afdbeb04bb2"
+    }
+  ],
+  "follows": [
+    {
+      "id": "6d65",
+      "followTo": "682083418fd16afdbeb04bac",
+      "followedBy": "682084268fd16afdbeb04bae"
+    },
+    {
+      "id": "9453",
+      "followTo": "682084268fd16afdbeb04bae",
+      "followedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "298a",
+      "followTo": "6820850a8fd16afdbeb04bb0",
+      "followedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "d58f",
+      "followTo": "682085278fd16afdbeb04bb2",
+      "followedBy": "682083418fd16afdbeb04bac"
+    },
+    {
+      "id": "17f2",
+      "followTo": "682085278fd16afdbeb04bb2",
+      "followedBy": "682084268fd16afdbeb04bae"
+    },
+    {
+      "id": "68fb",
+      "followTo": "682084268fd16afdbeb04bae",
+      "followedBy": "682085278fd16afdbeb04bb2"
+    }
+  ]
+}

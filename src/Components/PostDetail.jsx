@@ -1,24 +1,30 @@
 import axios, { all } from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import LikeButton from "../Components/LikeButton";
+
 
 const PostDetail = () => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
+  const [commentCounts, setCommentCounts] = useState([]);
+
 
   const fetchBlogPost = async () => {
     try {
       const response = await axios.get(`http://127.0.0.1:3000/getBlogs`);
-      // const processedBlogs = response.data.map((blog) => ({
-      //   id: blog._id,
-      //   title: blog.title,
-      //   description: blog.description,
-      //   user: blog.user,
-      //   commentsCount: blog.comments?.length || 0,
-      // }));
       const allBlogs = response.data;
       const shuffleBlogs = allBlogs.sort(() => Math.random() - 0.5); // math
       setBlogs(shuffleBlogs);
+      const commentCounts = allComments.filter(comment => comment.userId._id === userId).length;
+      setCommentCounts(commentCounts);
+
+      const allComments = [];
+      for (const blog of allBlogs) {
+        allComments.push(...blog.comments);
+      }
+
+
     } catch (error) {
       console.error("Error fetching blogs:", error);
     }
@@ -59,14 +65,15 @@ const PostDetail = () => {
                   {blog.description}
                 </p>
                 <div className="d-flex align-items-center mt-2">
-                  <i
-                    className="fa fa-heart text-danger me-3 fs-6 text-secondary"
+                  {/* <i
+                    className="fa-regular fa-heart tex me-1 fs-6 text-secondary"
                     style={{ cursor: "pointer" }}
-                  ></i>
+                  ></i> <span className="text-secondary">100</span> */}
+                  <LikeButton blogId={blog._id} />
                   <i
-                    className="fa-regular fa-comment me-3 fs-6 text-secondary"
+                    className="fa-regular fa-comment ms-3 me-1 fs-6 text-secondary"
                     style={{ cursor: "pointer" }}
-                  ></i>
+                  ></i> <span className="text-secondary">{blog.comments.length}</span>
                 </div>
               </div>
             </div>

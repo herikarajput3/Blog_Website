@@ -6,6 +6,7 @@ import StaffPicks from "../../Components/StaffPicks";
 import RecommendedTopics from "../../Components/RecommendedTopics";
 import WhoToFollow from "../../Components/WhomToFollow";
 import Footer from "../../Components/Footer";
+// import LikeButton from "../../Components/LikeButton";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
             <div className="p-3">
               <Navbar />
               <PostDetail />
+              {/* <LikeButton /> */}
 
             </div>
           </div>

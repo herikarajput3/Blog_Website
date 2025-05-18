@@ -4,6 +4,7 @@ import UserProfileIcon from '../../Components/UserProfileIcon';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import BlogDelete from '../../Components/BlogDelete';
+import LikeButton from '../../Components/LikeButton';
 
 const UserProfile = () => {
     const [userDetails, setUserDetails] = useState('');
@@ -12,8 +13,35 @@ const UserProfile = () => {
     const [showOptions, setShowOptions] = useState(null);
     const [blogId, setBlogId] = useState('');
 
+    const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
+
     const userId = JSON.parse(localStorage.getItem('userId'));
     const navigate = useNavigate();
+
+    const fetchFollowers = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:5000/follows');
+            const follows = response.data;
+
+            const followers = follows.filter(follow => follow.followTo === userId);
+            setFollowers(followers);
+        } catch (error) {
+            console.error('Error fetching followers:', error);
+        }
+    }
+
+    const fetchFollowing = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:5000/follows');
+            const follows = response.data;
+
+            const following = follows.filter(follow => follow.followedBy === userId);
+            setFollowing(following);
+        } catch (error) {
+            console.error('Error fetching following:', error);
+        }
+    }
 
 
     const fetchUserData = async () => {
@@ -28,6 +56,8 @@ const UserProfile = () => {
 
     useEffect(() => {
         fetchUserData();
+        fetchFollowers();
+        fetchFollowing();
     }, [userId]);
 
     const handlePostClick = (id) => {
@@ -58,11 +88,11 @@ const UserProfile = () => {
                                 )}
                                 <div className="d-flex justify-content-center mb-4">
                                     <div className="px-3 border-end">
-                                        <h5 className="fw-bold mb-0">10M</h5>
+                                        <h5 className="fw-bold mb-0">{followers.length}</h5>
                                         <small className="text-muted">Followers</small>
                                     </div>
                                     <div className="px-3">
-                                        <h5 className="fw-bold mb-0">118</h5>
+                                        <h5 className="fw-bold mb-0">{following.length}</h5>
                                         <small className="text-muted">Following</small>
                                     </div>
                                 </div>
@@ -90,7 +120,7 @@ const UserProfile = () => {
                                 <i className="fa fa-file-text me-2"></i>My Posts
                             </button>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <button
                                 className={`nav-link ${activeTab === 'liked' ? 'active fw-bold' : 'text-muted'
                                     }`}
@@ -98,7 +128,7 @@ const UserProfile = () => {
                             >
                                 <i className="fa fa-heart me-2"></i>Liked
                             </button>
-                        </li>
+                        </li> */}
                     </ul>
 
                     <div>
@@ -125,10 +155,11 @@ const UserProfile = () => {
                                                 </p>
                                                 <div className="d-flex align-items-center mt-2">
                                                     <span className="me-3">
-                                                        <i className="fa fa-heart text-danger me-1"></i>100
+                                                        <LikeButton blogId={post._id} />
                                                     </span>
                                                     <span>
-                                                        <i className="fa fa-comment me-1 fs-6 text-secondary"></i>13
+                                                        <i className="fa fa-comment me-1 fs-6 text-secondary"></i>
+                                                        {post.comments.length}
                                                     </span>
                                                     <div className="position-relative ms-auto me-2">
                                                         <button
@@ -185,14 +216,14 @@ const UserProfile = () => {
                             )
                         )}
                     </div>
-                    <div>
+                    {/* <div>
                         {activeTab === 'liked' && (
                             <div className="text-center p-5 bg-light rounded">
                                 <i className="fa fa-heart fa-3x text-muted mb-3"></i>
                                 <p className="text-muted">You haven't liked any posts yet.</p>
                             </div>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
